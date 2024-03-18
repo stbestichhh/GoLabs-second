@@ -37,13 +37,19 @@ func main() {
 		fmt.Println(os.Stderr, "Usage: go run cmd/example/main.go -e <expression> | -f <path/to/expression-file [-o <path/to/outputfile>]")
 	}
 
-	// TODO: Change this to accept input from the command line arguments as described in the task and
-	//       output the results using the ComputeHandler instance.
-	//       handler := &lab2.ComputeHandler{
-	//           Input: {construct io.Reader according the command line parameters},
-	//           Output: {construct io.Writer according the command line parameters},
-	//       }
-	//       err := handler.Compute()
+	if *&outputFile != "" {
+		file, err := os.Create(*outputFile)
+
+		if err != nil {
+			fmt.Println(os.Stderr, "Cannot create file.", err)
+		}
+
+		defer file.Close()
+
+		output = file
+	} else {
+		output = os.Stdout
+	}
 
 	res, _ := lab2.PrefixToInfix("+ 2 2")
 	fmt.Println(res)
