@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"go_lab_second"
+	lab2 "go_lab_second"
 	"io"
 	"os"
 	"strings"
@@ -37,7 +37,7 @@ func main() {
 		fmt.Println(os.Stderr, "Usage: go run cmd/example/main.go -e <expression> | -f <path/to/expression-file [-o <path/to/outputfile>]")
 	}
 
-	if *&outputFile != "" {
+	if *outputFile != "" {
 		file, err := os.Create(*outputFile)
 
 		if err != nil {
@@ -51,6 +51,13 @@ func main() {
 		output = os.Stdout
 	}
 
-	res, _ := lab2.PrefixToInfix("+ 2 2")
-	fmt.Println(res)
+	handler := lab2.ComputeHandler{
+		Input: input,
+		Output: output,
+		Calculator: &lab2.PrefixCalculator{},
+	}
+
+	if err := handler.Compute(); err != nil {
+		fmt.Println(os.Stderr, "Unexpected error occured.", err)
+	}
 }
