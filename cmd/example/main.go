@@ -3,25 +3,61 @@ package main
 import (
 	"flag"
 	"fmt"
-	"go_lab_second"
+	lab2 "go_lab_second"
+	"io"
+	"os"
+	"strings"
 )
 
 var (
 	inputExpression = flag.String("e", "", "Expression to compute")
-	// TODO: Add other flags support for input and output configuration.
+	inputFile       = flag.String("f", "", "Path/to/expression-file")
+	outputFile      = flag.String("o", "", "Path/to/output-file")
 )
 
 func main() {
 	flag.Parse()
 
-	// TODO: Change this to accept input from the command line arguments as described in the task and
-	//       output the results using the ComputeHandler instance.
-	//       handler := &lab2.ComputeHandler{
-	//           Input: {construct io.Reader according the command line parameters},
-	//           Output: {construct io.Writer according the command line parameters},
-	//       }
-	//       err := handler.Compute()
+	var input io.Reader
+	var output io.Writer
 
-	res, _ := lab2.PrefixToInfix("+ 2 2")
-	fmt.Println(res)
+	if *inputExpression != "" {
+		input = strings.NewReader(*inputExpression)
+	} else if *inputFile != "" {
+		file, err := os.Open(*inputFile)
+
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Cannot open file.", err)
+		}
+
+		defer file.Close()
+
+		input = file
+	} else {
+		fmt.Fprintln(os.Stderr, "Usage: go run cmd/example/main.go -e <expression> | -f <path/to/expression-file [-o <path/to/outputfile>]")
+	}
+
+	if *outputFile != "" {
+		file, err := os.Create(*outputFile)
+
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Cannot create file.", err)
+		}
+
+		defer file.Close()
+
+		output = file
+	} else {
+		output = os.Stdout
+	}
+
+	handler := lab2.ComputeHandler{
+		Input:      input,
+		Output:     output,
+		Calculator: &lab2.PrefixCalculator{},
+	}
+
+	if err := handler.Compute(); err != nil {
+		fmt.Fprintln(os.Stderr, "Unexpected error occured.", err)
+	}
 }
