@@ -8,7 +8,7 @@ import (
 
 type PrefixCalculatorSpy struct {
 	Result int
-	Error error
+	Error  error
 }
 
 func (prefixCalcSpy *PrefixCalculatorSpy) ConvertPrefixToInfix(expression string) (int, error) {
@@ -20,8 +20,8 @@ type PrefixToInfixCalculator interface {
 }
 
 type ComputeHandler struct {
-	Input io.Reader
-	Output io.Writer
+	Input      io.Reader
+	Output     io.Writer
 	Calculator PrefixToInfixCalculator
 }
 

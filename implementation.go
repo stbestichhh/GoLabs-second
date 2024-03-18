@@ -1,6 +1,6 @@
 package lab2
 
-type PrefixCalculator struct {}
+type PrefixCalculator struct{}
 
 // TODO: document this function.
 // PrefixToPostfix converts

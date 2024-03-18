@@ -11,8 +11,8 @@ import (
 
 var (
 	inputExpression = flag.String("e", "", "Expression to compute")
-	inputFile = flag.String("f", "", "Path/to/expression-file")
-	outputFile = flag.String("o", "", "Path/to/output-file")
+	inputFile       = flag.String("f", "", "Path/to/expression-file")
+	outputFile      = flag.String("o", "", "Path/to/output-file")
 )
 
 func main() {
@@ -27,21 +27,21 @@ func main() {
 		file, err := os.Open(*inputFile)
 
 		if err != nil {
-			fmt.Println(os.Stderr, "Cannot open file.", err)
+			fmt.Fprintln(os.Stderr, "Cannot open file.", err)
 		}
 
 		defer file.Close()
 
-		input = file;
+		input = file
 	} else {
-		fmt.Println(os.Stderr, "Usage: go run cmd/example/main.go -e <expression> | -f <path/to/expression-file [-o <path/to/outputfile>]")
+		fmt.Fprintln(os.Stderr, "Usage: go run cmd/example/main.go -e <expression> | -f <path/to/expression-file [-o <path/to/outputfile>]")
 	}
 
 	if *outputFile != "" {
 		file, err := os.Create(*outputFile)
 
 		if err != nil {
-			fmt.Println(os.Stderr, "Cannot create file.", err)
+			fmt.Fprintln(os.Stderr, "Cannot create file.", err)
 		}
 
 		defer file.Close()
@@ -52,12 +52,12 @@ func main() {
 	}
 
 	handler := lab2.ComputeHandler{
-		Input: input,
-		Output: output,
+		Input:      input,
+		Output:     output,
 		Calculator: &lab2.PrefixCalculator{},
 	}
 
 	if err := handler.Compute(); err != nil {
-		fmt.Println(os.Stderr, "Unexpected error occured.", err)
+		fmt.Fprintln(os.Stderr, "Unexpected error occured.", err)
 	}
 }
