@@ -26,7 +26,7 @@ func TestCompute(t *testing.T) {
 		isError    bool
 	}{
 		{"Should pass", fields{strings.NewReader("+ 5 * - 4 2 3"), &writer}, PrefixCalculatorSpy{+5, nil}, false},
-		{"Should pass", fields{strings.NewReader("5 -"), &writer}, PrefixCalculatorSpy{0, errors.New(mockError)}, true},
+		{"Should pass", fields{strings.NewReader("+5 - 10 * 2  6"), &writer}, PrefixCalculatorSpy{0, errors.New(mockError)}, true},
 	}
 
 	for _, test := range tests {
