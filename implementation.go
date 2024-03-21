@@ -1,47 +1,41 @@
 package lab2
 
 import (
-	"fmt"
+	"errors"
+	"strings"
 )
 
 type PrefixCalculator struct {}
 
-func isOperator(x rune) bool {
-	switch x {
-	case '+', '-', '*', '/', '^', '%':
-		return true
-	}
-	return false
+func isOperator(token string) bool {
+	return token == "+" || token == "-" || token == "*" || token == "/"
 }
 
 func (ptic *PrefixCalculator) ConvertPrefixToInfix(str string) (string, error) {
-	stack := []string{}
+		tokens := strings.Fields(str)
+		stack := []string{}
 
-	length:= len(str)
+		for i := len(tokens) - 1; i >= 0; i-- {
+			token := tokens[i]
+			if isOperator(token) {
+				if len(stack) < 2 {
+					return "", errors.New("invalid prefix expression")
+				}
 
-	for i := length - 1; i >= 0; i-- {
-		c := rune(str[i])
-
-		if isOperator(c) {
-			if len(stack) >= 2 {
 				op1 := stack[len(stack)-1]
 				stack = stack[:len(stack)-1]
 				op2 := stack[len(stack)-1]
 				stack = stack[:len(stack)-1]
 
-				temp := fmt.Sprintf("%s%c%s", op1, c, op2)
-				stack = append(stack, temp)
+				stack = append(stack, "("+op1+token+op2+")")
 			} else {
-				return "", fmt.Errorf("Invalid prefix expression");
+				stack = append(stack, token)
 			}
-		} else {
-			stack = append(stack, string(c))
 		}
-	}
 
-	if (len(stack) != 1) {
-		return "", fmt.Errorf("Invalid prefix expression")
-	}
+		if len(stack) != 1 {
+			return "", errors.New("invalid prefix expression")
+		}
 
-	return stack[len(stack)-1], nil;
+		return stack[0], nil
 }
