@@ -2,6 +2,7 @@ package lab2
 
 import (
 	"testing"
+	"errors"
 	//lab2 "go_lab_second"
 	"github.com/stretchr/testify/assert"
 )
@@ -41,7 +42,7 @@ func TestConvertPrefixToInfix(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			calc := &lab2.PrefixCalculatorSpy{Result: tt.expected, Error: tt.err}
+			calc := PrefixCalculatorSpy{Result: tt.expected, Error: tt.err}
 			result, err := calc.ConvertPrefixToInfix(tt.expression)
 
 			assert.Equal(t, tt.expected, result)
