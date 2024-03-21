@@ -1,8 +1,10 @@
-package main
+package lab2
 
 import (
 	"fmt"
 )
+
+type PrefixCalculator struct {}
 
 func isOperator(x rune) bool {
 	switch x {
@@ -12,12 +14,12 @@ func isOperator(x rune) bool {
 	return false
 }
 
-func convert(str string) string {
+func (ptic *PrefixCalculator) ConvertPrefixToInfix(str string) (string, error) {
 	stack := []string{}
 
-	l := len(str)
+	length:= len(str)
 
-	for i := l - 1; i >= 0; i-- {
+	for i := length - 1; i >= 0; i-- {
 		c := rune(str[i])
 
 		if isOperator(c) {
@@ -27,20 +29,19 @@ func convert(str string) string {
 				op2 := stack[len(stack)-1]
 				stack = stack[:len(stack)-1]
 
-				temp := fmt.Sprintf("(%s%c%s)", op1, c, op2)
+				temp := fmt.Sprintf("%s%c%s", op1, c, op2)
 				stack = append(stack, temp)
 			} else {
-				return "Invalid prefix expression"
+				return "", fmt.Errorf("Invalid prefix expression");
 			}
 		} else {
 			stack = append(stack, string(c))
 		}
 	}
-	return stack[len(stack)-1]
-}
 
-func main() {
-	exp := "your math problem here"
+	if (len(stack) != 1) {
+		return "", fmt.Errorf("Invalid prefix expression")
+	}
 
-	fmt.Println("Infix :", convert(exp))
+	return stack[len(stack)-1], nil;
 }

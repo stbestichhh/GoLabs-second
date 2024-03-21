@@ -7,16 +7,16 @@ import (
 )
 
 type PrefixCalculatorSpy struct {
-	Result int
+	Result string
 	Error  error
 }
 
-func (prefixCalcSpy *PrefixCalculatorSpy) ConvertPrefixToInfix(expression string) (int, error) {
+func (prefixCalcSpy *PrefixCalculatorSpy) ConvertPrefixToInfix(expression string) (string, error) {
 	return prefixCalcSpy.Result, prefixCalcSpy.Error
 }
 
 type PrefixToInfixCalculator interface {
-	ConvertPrefixToInfix(expression string) (int, error)
+	ConvertPrefixToInfix(expression string) (string, error)
 }
 
 type ComputeHandler struct {
@@ -39,6 +39,6 @@ func (ch *ComputeHandler) Compute() error {
 		return err
 	}
 
-	_, err = ch.Output.Write([]byte(fmt.Sprintf("%d\n", result)))
+	_, err = ch.Output.Write([]byte(fmt.Sprintf(result)))
 	return err
 }
