@@ -55,7 +55,7 @@ if test.expectedErr {
 }
 
 // ExampleConvertPrefixToInfix demonstrates how to use the ConvertPrefixToInfix
-func ExampleConvertPrefixToInfix() {
+func ExamplePrefixCalculator_ConvertPrefixToInfix() {
 	prefixCalc := PrefixCalculator{}
 
 	// Простий приклад виразу
